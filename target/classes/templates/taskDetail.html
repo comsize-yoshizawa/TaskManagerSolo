@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:replace="~{pageName :: pageName}"></div>
+	<div th:replace="~{menu :: button}"></div>
+	<table border=1 height="150">
+		<tr>
+			<th>タスク名</th>
+			<td th:text="${task.taskName}"></td>
+		</tr>
+		<tr>
+			<th>カテゴリ</th>
+			<td th:text="${task.categoryName}">
+			</td>
+		</tr>
+		<tr>
+			<th>期限</th>
+			<td th:text="${task.limitDate}">
+			</td>
+		</tr>
+		<tr>
+			<th>担当者情報</th>
+			<td th:text="${task.userName}">
+			</td>
+		</tr>
+		<tr>
+			<th>ステータス</th>
+			<td th:text="${task.statusName}">
+			</td>
+		</tr>
+		<tr>
+			<th>メモ</th>
+			<td th:text="${task.memo}">
+			</td>
+		</tr>
+	</table>
+	<br>
+	<form method="get">
+		<button type="submit" th:formaction="@{/task/alter/{taskId}(taskId=${task.taskId})}">編集</button>
+		<button type="submit" th:formaction="@{/task/deleteConfirm/{taskId}(taskId=${task.taskId})}">削除</button>
+	</form>
+	<div th:replace="~{menuButton :: menuButton}"></div>
+	<h1>コメント投稿</h1>
+	<form id="commentForm" method="POST" th:action="@{/task/commentPost/{taskId}(taskId=${task.taskId})}">
+		<textarea rows="4" cols="25" name="comment" maxlength="100" required></textarea>
+		<br><br>
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+		<input type="hidden" name="token" th:value="${token}">
+		<button type="submit" >投稿する</button>
+	</form>
+	<h1>コメント一覧</h1>
+	<div id="commentArea" th:fragment="commentArea">
+		<div th:each="comment, stat:${commentList}" th:if="${comment != null}">
+			<a th:if="${comment.userId == #authentication.name}"
+				th:href="@{/task/commentDelete/confirm/{commentId}(commentId=${comment.commentId})}">
+				[[${stat.count}]]
+			</a>
+			<span th:unless="${comment.userId == #authentication.name}">
+				[[${stat.count}]]
+			</span>
+			投稿者:
+			<span th:text="${comment.userName}">
+			</span>
+			投稿日時:
+			<span th:text="${#temporals.format(comment.updateDateTime, 'yyyy-MM-dd HH:mm:ss')}">
+			</span>
+			<br>
+			<table border="1">
+				<tr>
+					<td th:text="${comment.comment}"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<script>
+	document.getElementById('commentForm').addEventListener('submit', function(event) {
+    // 1. 通常のページ遷移（リロード）をキャンセルする
+    event.preventDefault();
+
+    // 2. フォームのデータを取得
+    const formData = new FormData(this);
+
+    // 3. コントローラーへ非同期通信（Ajax）を送る
+    fetch(this.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text()) // コントローラーから部分的なHTMLが返ってくる
+    .then(html => {
+        // 4. コメントエリア（#commentArea）の中身だけを最新のHTMLに置き換える！
+        document.getElementById('commentArea').outerHTML = html;
+        // 入力欄を空にする
+        this.reset();
+    })
+    .catch(error => console.error('エラーが発生しました:', error));
+	});
+</script>
+</body>
+</html>

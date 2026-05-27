@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1 th:switch="${session.mode}" th:fragment="pageName">
+    <span th:case="'create'">タスク登録</span>
+    <span th:case="'detail'">タスク詳細</span>
+    <span th:case="'alter'">タスク編集</span>
+    <span th:case="'delete'">タスク削除</span>
+    <span th:case="'commentDelete'">コメント削除</span>
+    <span th:case="*"
+          th:text="${title}">
+    </span>
+	</h1>
+</body>
+</html>
