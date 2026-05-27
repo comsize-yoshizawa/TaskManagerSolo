@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1 th:switch="${action}">
+	    <span th:case="'create'">新規登録完了</span>
+	    <span th:case="'update'">編集完了</span>
+	    <span th:case="'delete'">削除完了</span>
+	    <span th:case="'alter'">更新完了</span>
+	    <span th:case="*"
+	          th:text="${message}">
+	    </span>
+	</h1>
+	<div th:replace="~{menu :: button}"></div>
+	<div th:replace="~{menuButton :: menuButton}"></div>
+</body>
+</html>
