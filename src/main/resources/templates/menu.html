@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>メニュー画面</h1>
+	<div th:fragment="button">
+		<table>
+			<tr>
+				<td nowrap>
+					<form method="get">
+						<button type="submit" th:formaction="@{/task/create}">タスク登録</button>
+					</form>
+				</td>
+				<td nowrap>
+					<form method="get">
+						<button type="submit" th:formaction="@{/task/list}">タスク一覧</button>
+					</form>
+				</td>
+				<td width="100%">
+				</td>
+				<td nowrap>
+					<form method="get">
+						<button type="submit" th:formaction="@{/logout}">ログアウト</button>
+					</form>
+				</td>
+			</tr>
+		</table>
+		<br>
+		<p th:if="${errorMessage}" th:text="${errorMessage}"></p>
+	</div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:replace="~{pageName :: pageName}"></div>
+	<div th:replace="~{menu :: button}"></div>
+	<table border=1 height="150">
+		<tr>
+			<th>タスク名</th>
+			<td th:text="${task.taskName}"></td>
+		</tr>
+		<tr>
+			<th>カテゴリ</th>
+			<td th:text="${task.categoryName}">
+			</td>
+		</tr>
+		<tr>
+			<th>期限</th>
+			<td th:text="${task.limitDate}">
+			</td>
+		</tr>
+		<tr>
+			<th>担当者情報</th>
+			<td th:text="${task.userName}">
+			</td>
+		</tr>
+		<tr>
+			<th>ステータス</th>
+			<td th:text="${task.statusName}">
+			</td>
+		</tr>
+		<tr>
+			<th>メモ</th>
+			<td th:text="${task.memo}">
+			</td>
+		</tr>
+	</table>
+	<br>
+	<table>
+		<td>
+			<form method="post">
+				<input type="hidden" name="token" th:value="${token}">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				<button type="submit" th:formaction="@{/task/delete/{taskId}(taskId=${task.taskId})}">削除</button>
+			</form>
+		</td>
+		<td>
+			<form method="get">
+				<button type="submit" th:formaction="@{/task/detail/{taskId}(taskId=${task.taskId})}">詳細へ戻る</button>
+			</form>
+		</td>
+	</table>
+</body>
+</html>
