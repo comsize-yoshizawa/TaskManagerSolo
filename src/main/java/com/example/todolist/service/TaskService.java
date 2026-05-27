@@ -59,11 +59,6 @@ public class TaskService {
 		return dto;
 	}
 	
-	public Task getTask(int taskId) {
-		Task task = taskRepository.findById(taskId).orElseThrow();
-		return task;
-	}
-	
 	public void deleteTask(int taskId) {
 		taskRepository.deleteById(taskId);
 	}
@@ -74,5 +69,19 @@ public class TaskService {
 		Status status = statusRepository.findById(taskData.getStatusCode()).orElseThrow();
 		Task task = taskData.toEntity(category, user, status);
 		taskRepository.saveAndFlush(task);
+	}
+	
+	public TaskData toForm(int taskId) {
+		TaskData taskForm = new TaskData();
+		Task task = taskRepository.findById(taskId).orElseThrow();
+		taskForm.setTaskId(task.getTaskId());
+		taskForm.setTaskName(task.getTaskName());
+		taskForm.setCategoryId(task.getCategory().getCategoryId());
+		taskForm.setLimitDate(task.getLimitDate());
+		taskForm.setUserId(task.getUser().getUserId());
+		taskForm.setStatusCode(task.getStatus().getStatusCode());
+		taskForm.setMemo(task.getMemo());
+		return taskForm;
+		
 	}
 }

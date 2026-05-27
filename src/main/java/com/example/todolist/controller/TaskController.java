@@ -22,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.todolist.dto.CommentDto;
 import com.example.todolist.dto.TaskDetailDto;
 import com.example.todolist.dto.TaskListDto;
-import com.example.todolist.entity.Task;
 import com.example.todolist.form.TaskData;
 import com.example.todolist.service.CategoryService;
 import com.example.todolist.service.CommentService;
@@ -126,9 +125,7 @@ public class TaskController {
 	public String alterForm(@PathVariable(name = "taskId") Integer taskId,
 			Model model, HttpSession session,
 			RedirectAttributes redirectAttributes) {
-//		Task task = taskRepository.findById(taskId).orElseThrow();
-		Task task = taskService.getTask(taskId);
-		TaskData taskData = TaskData.toForm(task);
+		TaskData taskData = taskService.toForm(taskId);
 
 		setToken(model,session);
 		session.setAttribute("mode", "alter");

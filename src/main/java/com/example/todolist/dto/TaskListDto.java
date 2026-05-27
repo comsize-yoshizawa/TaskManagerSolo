@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TaskListDto {
-
 	private Integer taskId;
 	private String taskName;
 	
