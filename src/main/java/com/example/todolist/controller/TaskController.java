@@ -42,7 +42,7 @@ public class TaskController {
 	private final StatusService statusService;
 	private final CommentService commentService;
 	
-	private void sendFormList(Model model) {
+	private void setFormMasterData(Model model) {
 		model.addAttribute("categoryList", categoryService.getAllCategories());
 		model.addAttribute("userList", userService.getAllUsers());
 	    model.addAttribute("statusList", statusService.getAllStatus());
@@ -71,7 +71,7 @@ public class TaskController {
 		setToken(model,session);
 		session.setAttribute("mode", "create");
 		model.addAttribute("taskData", new TaskData());
-		sendFormList(model);
+		setFormMasterData(model);
 
 		return "taskForm";
 	}
@@ -81,7 +81,6 @@ public class TaskController {
 			BindingResult result, Model model, @RequestParam String token,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 
-		isInvalidToken(token,session);
 		if (isInvalidToken(token, session)) {
 		    return "redirect:/menu";
 		}
@@ -92,7 +91,7 @@ public class TaskController {
 			session.removeAttribute("token");
 			return "redirect:/done";
 		} else {
-			sendFormList(model);
+			setFormMasterData(model);
 			return "taskForm";
 		}
 	}
@@ -127,7 +126,7 @@ public class TaskController {
 
 		setToken(model,session);
 		session.setAttribute("mode", "alter");
-		sendFormList(model);
+		setFormMasterData(model);
 		model.addAttribute("taskData", taskData);
 		return "taskForm";
 	}
@@ -150,7 +149,7 @@ public class TaskController {
 
 	@PostMapping("/task/delete/{taskId}")
 	public String taskDelete(@PathVariable(name = "taskId") Integer taskId,
-			Model model, RedirectAttributes redirectAttributes,
+			RedirectAttributes redirectAttributes,
 			@RequestParam String token,
 			HttpSession session) {
 		if (isInvalidToken(token, session)) {
@@ -162,6 +161,7 @@ public class TaskController {
 		return "redirect:/done";
 	}
 
+//ajaxでコメント送信をするようにしたため過去の遺産
 //	@PostMapping("/task/commentPost/{taskId}")
 //	public String commentPost(@PathVariable(name = "taskId") Integer taskId,
 //			Model model, HttpSession session,
@@ -211,7 +211,7 @@ public class TaskController {
 
 	@PostMapping("/task/commentDelete/{commentId}")
 	public String commentDelete(@PathVariable(name = "commentId") Integer commentId,
-			Model model, HttpSession session,
+			HttpSession session,
 			@RequestParam("token") String token,
 			@RequestParam("taskId") int taskId,
 			@AuthenticationPrincipal UserDetails userDetails) {
@@ -219,7 +219,6 @@ public class TaskController {
 		if (isInvalidToken(token, session)) {
 		    return "redirect:/menu";
 		}
-		model.addAttribute("taskId", taskId);
 		commentService.deleteComment(commentId, userDetails.getUsername());
 		session.removeAttribute("token");
 
