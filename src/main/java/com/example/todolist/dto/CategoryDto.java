@@ -17,6 +17,6 @@ public class CategoryDto {
 		dto.setCategoryId(category.getCategoryId());
 		dto.setCategoryName(category.getCategoryName());
 		
-		return dto;	
+		return dto;
 	}
 }
