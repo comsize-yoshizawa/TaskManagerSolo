@@ -66,8 +66,7 @@ public class TaskController {
 	}
 
 	@GetMapping("/task/create")
-	public String taskRegisterForm(Model model, HttpSession session,
-			RedirectAttributes redirectAttributes) {
+	public String taskRegisterForm(Model model, HttpSession session) {
 
 		setToken(model,session);
 		session.setAttribute("mode", "create");
@@ -111,7 +110,7 @@ public class TaskController {
 
 	@GetMapping("/task/detail/{taskId}")
 	public String detail(@PathVariable(name = "taskId") Integer taskId, Model model,
-			RedirectAttributes redirectAttributes, HttpSession session) {
+			HttpSession session) {
 		TaskDetailDto taskDto = taskService.getTaskDetail(taskId);
 		List<CommentDto> commentListDto = commentService.getCommentList(taskId);
 		session.setAttribute("mode", "detail");
@@ -123,8 +122,7 @@ public class TaskController {
 
 	@GetMapping("/task/alter/{taskId}")
 	public String alterForm(@PathVariable(name = "taskId") Integer taskId,
-			Model model, HttpSession session,
-			RedirectAttributes redirectAttributes) {
+			Model model, HttpSession session) {
 		TaskData taskData = taskService.toForm(taskId);
 
 		setToken(model,session);
@@ -192,7 +190,6 @@ public class TaskController {
 			}
 			
 			List<CommentDto> commentList = commentService.postComment(taskId, userDetails.getUsername(), comment);
-
 			model.addAttribute("commentList", commentList);
 			
 			return "taskDetail :: commentArea";
