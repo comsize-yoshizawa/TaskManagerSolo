@@ -108,8 +108,8 @@ public class TaskController {
 	}
 
 	@GetMapping("/task/detail/{taskId}")
-	public String detail(@PathVariable(name = "taskId") Integer taskId, Model model,
-			HttpSession session) {
+	public String detail(@PathVariable(name = "taskId") Integer taskId,
+			Model model,HttpSession session) {
 		TaskDetailDto taskDto = taskService.getTaskDetail(taskId);
 		List<CommentDto> commentListDto = commentService.getCommentList(taskId);
 		session.setAttribute("mode", "detail");
@@ -138,9 +138,13 @@ public class TaskController {
 	}
 
 	@GetMapping("/task/deleteConfirm/{taskId}")
-	public String taskDeleteConfirm(@PathVariable(name = "taskId") Integer taskId, Model model,
-			HttpSession session) {
+	public String taskDeleteConfirm(@PathVariable(name = "taskId") Integer taskId, 
+			Model model,HttpSession session,
+			@AuthenticationPrincipal UserDetails userDetails) {
 		TaskDetailDto taskDto = taskService.getTaskDetail(taskId);
+		if(!taskDto.getUserId() .equals(userDetails.getUsername())) {
+			return "redirect:/task/detail/" + taskId;
+		}
 		setToken(model,session);
 		session.setAttribute("mode", "delete");
 		model.addAttribute("task", taskDto);

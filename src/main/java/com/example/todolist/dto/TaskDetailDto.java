@@ -16,6 +16,7 @@ public class TaskDetailDto {
 	private LocalDate limitDate;
 	
 	private String userName;
+	private String userId;
 	
 	private String statusName;
 	

@@ -52,6 +52,7 @@ public class TaskService {
 		dto.setTaskName(task.getTaskName());
 		dto.setCategoryName(task.getCategory().getCategoryName());
 		dto.setUserName(task.getUser().getUserName());
+		dto.setUserId(task.getUser().getUserId());
 		dto.setLimitDate(task.getLimitDate());
 		dto.setStatusName(task.getStatus().getStatusName());
 		dto.setMemo(task.getMemo());
