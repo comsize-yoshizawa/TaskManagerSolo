@@ -84,6 +84,9 @@ public class TaskController {
 			HttpSession session, RedirectAttributes redirectAttributes) {
 
 		isInvalidToken(token,session);
+		if (isInvalidToken(token, session)) {
+		    return "redirect:/menu";
+		}
 
 		if (!result.hasErrors()) {
 			taskService.saveTask(taskData);
@@ -155,7 +158,9 @@ public class TaskController {
 			Model model, RedirectAttributes redirectAttributes,
 			@RequestParam String token,
 			HttpSession session) {
-
+		if (isInvalidToken(token, session)) {
+		    return "redirect:/menu";
+		}
 		taskService.deleteTask(taskId);
 		session.removeAttribute("token");
 		redirectAttributes.addFlashAttribute("action", session.getAttribute("mode"));
@@ -185,7 +190,9 @@ public class TaskController {
 				@RequestParam("comment") String comment,
 				@RequestParam("token") String token,
 				@AuthenticationPrincipal UserDetails userDetails) {
-			isInvalidToken(token,session);
+			if (isInvalidToken(token, session)) {
+			    return "redirect:/menu";
+			}
 			
 			List<CommentDto> commentList = commentService.postComment(taskId, userDetails.getUsername(), comment);
 
@@ -215,7 +222,9 @@ public class TaskController {
 			@RequestParam("taskId") int taskId,
 			@AuthenticationPrincipal UserDetails userDetails) {
 
-		isInvalidToken(token,session);
+		if (isInvalidToken(token, session)) {
+		    return "redirect:/menu";
+		}
 		model.addAttribute("taskId", taskId);
 		commentService.deleteComment(commentId, userDetails.getUsername());
 		session.removeAttribute("token");
