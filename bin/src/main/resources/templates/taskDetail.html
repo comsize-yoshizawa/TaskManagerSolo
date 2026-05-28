@@ -40,7 +40,7 @@
 		</tr>
 	</table>
 	<br>
-	<form method="get">
+	<form method="get" th:if="${task.userId == #authentication.name}">
 		<button type="submit" th:formaction="@{/task/alter/{taskId}(taskId=${task.taskId})}">編集</button>
 		<button type="submit" th:formaction="@{/task/deleteConfirm/{taskId}(taskId=${task.taskId})}">削除</button>
 	</form>
