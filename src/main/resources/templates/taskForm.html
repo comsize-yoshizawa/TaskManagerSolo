@@ -65,7 +65,7 @@
 			</tr>
 		</table>
 		<table>
-			<div th:if="${session.mode == 'create'}">
+			<div th:if="${mode == 'create'}">
 				<tr>
 					<td>
 						<button type="submit">登録する</button>
@@ -77,15 +77,15 @@
 			</div>
 			<tr>
 				<td>
-					<div th:if="${session.mode == 'update'}">
+					<div th:if="${mode == 'update'}">
 						<button type="submit" th:formaction="@{/task/alter/{taskId}(taskId=*{taskId})}" formmethod="get">編集</button>
 						<button type="submit" th:formaction="@{/task/delete/{taskId}(taskId=*{taskId})}" formmethod="get">削除</button>
 					</div>
-					<div th:if="${session.mode == 'alter'}">
+					<div th:if="${mode == 'alter'}">
 						<button type="submit">編集</button>
 						<button type="submit" th:formaction="@{/task/detail/{taskId}(taskId=${taskId})}" formmethod="get">詳細へ戻る</button>
 					</div>
-					<div th:if="${session.mode == 'delete'}">
+					<div th:if="${mode == 'delete'}">
 						<button type="submit" th:formaction="@{/task/delete/{taskId}(taskId=*{taskId})}">削除</button>
 						<button type="submit" th:formaction="@{/task/detail/{taskId}(taskId=${taskId})}" formmethod="get">詳細へ戻る</button>
 					</div>

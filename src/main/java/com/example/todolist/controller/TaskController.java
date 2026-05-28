@@ -69,7 +69,7 @@ public class TaskController {
 	public String taskRegisterForm(Model model, HttpSession session) {
 
 		setToken(model,session);
-		session.setAttribute("mode", "create");
+		model.addAttribute("mode", "create");
 		model.addAttribute("taskData", new TaskData());
 		setFormMasterData(model);
 
@@ -87,7 +87,12 @@ public class TaskController {
 
 		if (!result.hasErrors()) {
 			taskService.saveTask(taskData);
-			redirectAttributes.addFlashAttribute("action", session.getAttribute("mode"));
+			if(taskData.getTaskId() == null) {
+				redirectAttributes.addFlashAttribute("mode", "create");
+			}else {
+				redirectAttributes.addFlashAttribute("mode","update");
+			}
+			
 			session.removeAttribute("token");
 			return "redirect:/done";
 		} else {
@@ -100,7 +105,7 @@ public class TaskController {
 	public String list(
 			@RequestParam(defaultValue = "0") int page,
 			Model model) {
-		
+		model.addAttribute("mode","list");
 		Page<TaskListDto> taskListDto = taskService.getAllTasks(page);
 		model.addAttribute("taskPage", taskListDto);
 
@@ -112,7 +117,7 @@ public class TaskController {
 			Model model,HttpSession session) {
 		TaskDetailDto taskDto = taskService.getTaskDetail(taskId);
 		List<CommentDto> commentListDto = commentService.getCommentList(taskId);
-		session.setAttribute("mode", "detail");
+		model.addAttribute("mode", "detail");
 		setToken(model,session);
 		model.addAttribute("task", taskDto);
 		model.addAttribute("commentList", commentListDto);
@@ -125,7 +130,7 @@ public class TaskController {
 		TaskData taskData = taskService.toForm(taskId);
 
 		setToken(model,session);
-		session.setAttribute("mode", "alter");
+		model.addAttribute("mode", "alter");
 		setFormMasterData(model);
 		model.addAttribute("taskData", taskData);
 		return "taskForm";
@@ -146,7 +151,7 @@ public class TaskController {
 			return "redirect:/task/detail/" + taskId;
 		}
 		setToken(model,session);
-		session.setAttribute("mode", "delete");
+		model.addAttribute("mode", "delete");
 		model.addAttribute("task", taskDto);
 		return "deleteConfirm";
 	}
@@ -161,7 +166,7 @@ public class TaskController {
 		}
 		taskService.deleteTask(taskId);
 		session.removeAttribute("token");
-		redirectAttributes.addFlashAttribute("action", session.getAttribute("mode"));
+		redirectAttributes.addFlashAttribute("mode", "delete");
 		return "redirect:/done";
 	}
 
@@ -206,7 +211,7 @@ public class TaskController {
 		CommentDto commentDto = commentService.getComment(commentId);
 		TaskDetailDto taskDto = taskService.getTaskDetail(commentDto.getTaskId());
 		setToken(model,session);
-		session.setAttribute("mode", "commentDelete");
+		model.addAttribute("mode", "commentDelete");
 		model.addAttribute("comment", commentDto);
 		model.addAttribute("task", taskDto);
 

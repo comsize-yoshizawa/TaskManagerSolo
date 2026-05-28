@@ -2,6 +2,7 @@ package com.example.todolist.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.todolist.dto.StatusDto;
@@ -16,7 +17,7 @@ public class StatusService {
 	private final StatusRepository repository;
 	
 	public List<StatusDto> getAllStatus(){
-		List<Status> statusList = repository.findAll();
+		List<Status> statusList = repository.findAll(Sort.by("statusCode"));
 		return statusList.stream()
 				.map(StatusDto::from).toList();
 	}

@@ -6,4 +6,5 @@ import com.example.todolist.entity.Task;
 
 public interface TaskRepository extends JpaRepository<Task, Integer>{
 
+	
 }
